@@ -28,6 +28,19 @@ public:
 	using nodetype = RB_node<key_type>;
 	using nodeptr = nodetype * ;
 
+	int back_height()
+	{
+		nodeptr np = root;
+		int back_count = 0;
+		for (; np;)
+		{
+			if (!np->isred)
+				++back_count;
+			np = np->left();
+		}
+		return back_count;
+	}
+
 	RB_Tree& insert(key_type key)
 	{
 		nodeptr parent = root;
@@ -345,5 +358,37 @@ private:
 };
 
 
+template<typename Key>
+int rbtreetest(RB_node<Key>* node)
+{
+	if (node == nullptr)
+		return 0;
+	else
+	{
+		int i1 = rbtreetest(node->left);
+		int i2 = rbtreetest(node->right);
+		if (i1 != i2)
+			return -1;
+		else
+		{
+			if (!node->isred)
+				return i1 + 1;
+			else
+				return i1;
+		}
+	}
+}
+
+
+template<typename Key>
+bool isRB_Tree(RB_node<Key>* root)
+{
+	if (root == nullptr)
+		return false;
+	if (rbtreetest(root) != -1)
+		return true;
+	else
+		return false;
+}
 
 #endif // !RB_TREE_HPP
